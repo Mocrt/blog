@@ -1,0 +1,16 @@
+{
+  "name": "micro-frontend-blog",
+  "version": "1.0.0",
+  "description": "A VuePress blog for learning micro-frontends",
+  "scripts": {
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs",
+    "docs:clean-dev": "vuepress dev docs --clean-cache"
+  },
+  "devDependencies": {
+    "@vuepress/bundler-vite": "^2.0.0-rc.15",
+    "@vuepress/theme-default": "^2.0.0-rc.42",
+    "vue": "^3.4.0",
+    "vuepress": "^2.0.0-rc.15"
+  }
+}
