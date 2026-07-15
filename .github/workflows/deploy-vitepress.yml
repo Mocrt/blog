@@ -1,0 +1,90 @@
+name: Deploy VitePress to Tencent COS + CDN
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build VitePress
+        run: npm run docs:build
+        env:
+          NODE_OPTIONS: --max_old_space_size=4096
+
+      - name: Install coscli
+        run: |
+          curl -L -o coscli https://github.com/tencentyun/coscli/releases/latest/download/coscli-linux
+          chmod +x coscli
+          sudo mv coscli /usr/local/bin/coscli
+          coscli --version
+
+      - name: Configure coscli
+        env:
+          TENCENT_SECRET_ID: ${{ secrets.TENCENT_SECRET_ID }}
+          TENCENT_SECRET_KEY: ${{ secrets.TENCENT_SECRET_KEY }}
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_REGION: ${{ secrets.COS_REGION }}
+        run: |
+          coscli config add \
+            --secret-id "$TENCENT_SECRET_ID" \
+            --secret-key "$TENCENT_SECRET_KEY" \
+            --bucket "$COS_BUCKET" \
+            --region "$COS_REGION" \
+            --alias blog
+
+      # VitePress 带 hash 的静态资源在 assets/ 下,长缓存
+      - name: Upload hashed assets (long cache)
+        run: |
+          coscli sync docs/.vitepress/dist/assets/ cos://blog/assets/ \
+            --recursive \
+            --meta "Cache-Control:public,max-age=31536000,immutable"
+
+      # HTML + 其他不带 hash 的文件不缓存
+      - name: Upload HTML and rest (no cache)
+        run: |
+          coscli sync docs/.vitepress/dist/ cos://blog/ \
+            --recursive \
+            --exclude "assets/*" \
+            --meta "Cache-Control:public,max-age=0,must-revalidate" \
+            --delete
+
+      - name: Purge Tencent CDN
+        uses: TencentCloud/cli-action@v1
+        with:
+          secret_id: ${{ secrets.TENCENT_SECRET_ID }}
+          secret_key: ${{ secrets.TENCENT_SECRET_KEY }}
+          region: ap-guangzhou
+          commands: |
+            cdn PurgePathCache \
+              --Paths '["${{ secrets.CDN_DOMAIN }}"]' \
+              --FlushType flush
+
+      - name: Summary
+        run: |
+          echo "### ✅ VitePress 部署成功" >> $GITHUB_STEP_SUMMARY
+          echo "- 站点: ${{ secrets.CDN_DOMAIN }}" >> $GITHUB_STEP_SUMMARY
+          echo "- 提交: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- 时间: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY

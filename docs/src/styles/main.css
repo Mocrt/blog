@@ -1,0 +1,232 @@
+/* =========================================================
+ * 全局风格:科技感调色 + 更好读的博客排版
+ * VitePress 的主题变量都以 --vp-* 开头,直接覆盖即可
+ * ========================================================= */
+
+:root {
+	/* 品牌主色:蓝紫渐变的锚点色 */
+	--vp-c-brand-1: #60a5fa;
+	--vp-c-brand-2: #3b82f6;
+	--vp-c-brand-3: #2563eb;
+	--vp-c-brand-soft: rgba(96, 165, 250, 0.14);
+
+	/* 首页 hero 主色 */
+	--vp-home-hero-name-color: transparent;
+	--vp-home-hero-name-background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
+
+	/* 更柔和的字体 */
+	--vp-font-family-base:
+		'Inter', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+	--vp-font-family-mono:
+		'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.dark {
+	/* 暗色下的背景更深邃一些,配合粒子效果 */
+	--vp-c-bg: #0a0e1a;
+	--vp-c-bg-alt: #0f1420;
+	--vp-c-bg-soft: #141a28;
+	--vp-c-bg-elv: #1a2032;
+	--vp-c-divider: rgba(255, 255, 255, 0.08);
+	--vp-c-border: rgba(255, 255, 255, 0.12);
+}
+
+/* =========================================================
+ * 导航栏:半透明 + 毛玻璃,和粒子背景融合
+ * ========================================================= */
+.VPNav {
+	backdrop-filter: blur(12px) saturate(160%);
+	-webkit-backdrop-filter: blur(12px) saturate(160%);
+}
+
+.dark .VPNav {
+	background: rgba(10, 14, 26, 0.6) !important;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+html:not(.dark) .VPNav {
+	background: rgba(255, 255, 255, 0.7) !important;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.VPNavBar.has-sidebar .content {
+	background: transparent !important;
+}
+
+/* =========================================================
+ * 博客内容区:简洁大气,增强阅读体验
+ * ========================================================= */
+.VPDoc {
+	padding-top: 0 !important;
+}
+
+.VPDoc .content-container {
+	max-width: 780px !important;
+}
+
+/* 文章标题:大字号 + 渐变下划线锚点 */
+.vp-doc h1 {
+	font-size: 2.5rem;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid var(--vp-c-divider);
+	position: relative;
+}
+
+.vp-doc h1::after {
+	content: '';
+	position: absolute;
+	bottom: -1px;
+	left: 0;
+	width: 60px;
+	height: 2px;
+	background: linear-gradient(90deg, #60a5fa, #a78bfa);
+	border-radius: 2px;
+}
+
+.vp-doc h2 {
+	font-size: 1.65rem;
+	font-weight: 700;
+	margin-top: 3rem;
+	padding-top: 1.5rem;
+	border-top: 1px dashed var(--vp-c-divider);
+	letter-spacing: -0.01em;
+}
+
+.vp-doc h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin-top: 2rem;
+}
+
+/* 正文:字号加大、行高加宽,更舒适 */
+.vp-doc p {
+	font-size: 1.02rem;
+	line-height: 1.85;
+	color: var(--vp-c-text-1);
+}
+
+/* 引用:左边一条渐变竖线 */
+.vp-doc blockquote {
+	border-left: 3px solid transparent;
+	border-image: linear-gradient(180deg, #60a5fa, #a78bfa) 1;
+	background: var(--vp-c-brand-soft);
+	padding: 0.85rem 1.25rem;
+	border-radius: 0 8px 8px 0;
+	margin: 1.5rem 0;
+}
+
+.vp-doc blockquote p {
+	color: var(--vp-c-text-2);
+	margin: 0;
+}
+
+/* 行内 code:淡色底 + 主色文字 */
+.vp-doc :not(pre) > code {
+	color: var(--vp-c-brand-1);
+	background: var(--vp-c-brand-soft);
+	padding: 0.15em 0.45em;
+	border-radius: 4px;
+	font-size: 0.88em;
+	font-weight: 500;
+	border: none;
+}
+
+/* 代码块:更精致的圆角 + 阴影 */
+.vp-doc div[class*='language-'] {
+	border-radius: 10px;
+	margin: 1.5rem 0;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+	border: 1px solid var(--vp-c-divider);
+}
+
+.dark .vp-doc div[class*='language-'] {
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* 表格:更清爽的分隔 */
+.vp-doc table {
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+}
+
+.vp-doc tr {
+	background: transparent !important;
+	border-top: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc th {
+	background: var(--vp-c-bg-soft) !important;
+	font-weight: 600;
+	text-align: left;
+}
+
+/* 正文链接:hover 时更亮 */
+.vp-doc a {
+	color: var(--vp-c-brand-1);
+	text-decoration: none;
+	border-bottom: 1px dashed var(--vp-c-brand-1);
+	transition: all 0.2s;
+}
+
+.vp-doc a:hover {
+	color: var(--vp-c-brand-2);
+	border-bottom-style: solid;
+}
+
+/* =========================================================
+ * 侧边栏:更简洁
+ * ========================================================= */
+.VPSidebar {
+	background: transparent !important;
+}
+
+.VPSidebarItem .text {
+	font-weight: 500 !important;
+}
+
+.VPSidebarItem.is-active > .item .text,
+.VPSidebarItem.is-active > .item .link {
+	color: var(--vp-c-brand-1) !important;
+	font-weight: 600 !important;
+}
+
+/* =========================================================
+ * 右侧目录 outline:高亮主色
+ * ========================================================= */
+.VPDocAsideOutline .outline-marker {
+	background: linear-gradient(180deg, #60a5fa, #a78bfa) !important;
+}
+
+.VPDocAsideOutline .outline-link.active {
+	color: var(--vp-c-brand-1) !important;
+}
+
+/* =========================================================
+ * 滚动条:细一点、带主色
+ * ========================================================= */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+::-webkit-scrollbar-track {
+	background: transparent;
+}
+::-webkit-scrollbar-thumb {
+	background: var(--vp-c-divider);
+	border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: var(--vp-c-brand-1);
+}
+
+/* =========================================================
+ * 选中文字
+ * ========================================================= */
+::selection {
+	background: var(--vp-c-brand-soft);
+	color: var(--vp-c-brand-1);
+}
