@@ -23,6 +23,9 @@ export default defineConfig({
 	// 用带 .html 后缀的 URL,COS + CDN 部署最省心
 	cleanUrls: false,
 
+	// 把打包产物输出到项目根目录的 dist,而不是默认的 docs/.vitepress/dist
+	outDir: fileURLToPath(new URL('../../dist', import.meta.url)),
+
 	lastUpdated: true,
 
 	head: [

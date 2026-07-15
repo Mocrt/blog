@@ -57,7 +57,7 @@ html:not(.dark) .VPNav {
  * 博客内容区:简洁大气,增强阅读体验
  * ========================================================= */
 .VPDoc {
-	padding-top: 2em !important;
+	padding-top: 2rem !important;
 }
 
 .VPDoc .content-container {
